@@ -1,765 +1,808 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Portfolio — Galaksi</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --void: #020010;
-    --deep: #050025;
-    --nebula-purple: #7c3aed;
-    --nebula-blue: #2563eb;
-    --nebula-pink: #db2777;
-    --star-white: #f0f4ff;
-    --dust: rgba(124,58,237,0.15);
-    --glow: 0 0 40px rgba(124,58,237,0.6), 0 0 80px rgba(37,99,235,0.3);
-    --text-dim: rgba(200,210,255,0.6);
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anang Nawansyah | Portofolio AI & Robotika</title>
+    
+    <!-- Tailwind CSS untuk styling utilitas yang cepat dan responsif -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Konfigurasi Tailwind untuk tema khusus -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'neon-cyan': '#00f3ff',
+                        'neon-purple': '#b026ff',
+                        'dark-bg': '#0a0a12',
+                        'dark-surface': '#161625',
+                    },
+                    fontFamily: {
+                        'mono': ['"Space Mono"', 'monospace', 'ui-monospace', 'SFMono-Regular'],
+                        'sans': ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                    },
+                    keyframes: {
+                        glow: {
+                            '0%': { boxShadow: '0 0 5px #00f3ff, 0 0 10px #00f3ff' },
+                            '100%': { boxShadow: '0 0 10px #00f3ff, 0 0 20px #00f3ff, 0 0 30px #b026ff' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
 
-  * { margin:0; padding:0; box-sizing:border-box; }
+    <!-- Font dari Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Ikon FontAwesome (menggunakan CDN) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  html { scroll-behavior: smooth; }
+    <style>
+        /* Kursor Kustom Tema Robot */
+        body {
+            background-color: #0a0a12;
+            color: #e2e8f0;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            /* Kursor Default: Panah Mecha */
+            cursor: url('data:image/svg+xml;utf8,<svg width="28" height="28" viewBox="0 0 24 24" fill="%23161625" stroke="%2300f3ff" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg"><polygon points="4,2 20,10 13,12 10,20" /><circle cx="10" cy="10" r="1.5" fill="%23b026ff" stroke="none"/></svg>') 4 2, auto;
+        }
 
-  body {
-    background: var(--void);
-    color: var(--star-white);
-    font-family: 'Exo 2', sans-serif;
-    overflow-x: hidden;
-    cursor: none;
-  }
+        /* Kursor tangan robot untuk elemen interaktif (hover) */
+        a, button, .btn-neon, input, textarea, .cursor-pointer, select {
+            cursor: url('data:image/svg+xml;utf8,<svg width="32" height="32" viewBox="0 0 24 24" fill="%23161625" stroke="%2300f3ff" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg"><path d="M8 11.5V4a2 2 0 0 1 4 0v6"/><path d="M12 9a2 2 0 0 1 4 0v3"/><path d="M16 11a2 2 0 0 1 4 0v6c0 3.3-2.7 6-6 6h-2c-3.3 0-6-2.7-6-6v-5l-2.6-2.6a2 2 0 0 1 2.8-2.8L8 11.5z"/><line x1="8" y1="6" x2="12" y2="6"/><line x1="12" y1="11" x2="16" y2="11"/><line x1="16" y1="13" x2="20" y2="13"/><circle cx="12" cy="18" r="2" fill="%23b026ff" stroke="none"/></svg>') 10 2, pointer !important;
+        }
 
-  /* Custom cursor */
-  #cursor {
-    position: fixed;
-    width: 16px; height: 16px;
-    border: 2px solid var(--nebula-purple);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9999;
-    transform: translate(-50%,-50%);
-    transition: width .2s, height .2s, border-color .2s;
-    mix-blend-mode: screen;
-  }
-  #cursor-dot {
-    position: fixed;
-    width: 4px; height: 4px;
-    background: var(--nebula-pink);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9999;
-    transform: translate(-50%,-50%);
-  }
-  body:hover #cursor { width: 24px; height: 24px; }
+        h1, h2, h3, .font-tech {
+            font-family: 'Space Mono', monospace;
+        }
 
-  /* Canvas stars */
-  #starfield {
-    position: fixed;
-    top:0; left:0;
-    width:100%; height:100%;
-    z-index: 0;
-  }
+        /* Latar belakang grid animasi */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image: 
+                linear-gradient(to right, rgba(0, 243, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+            transform: perspective(500px) rotateX(60deg) translateY(-100px) translateZ(-200px);
+            animation: gridMove 20s linear infinite;
+        }
 
-  /* Nebula blobs */
-  .nebula {
-    position: fixed;
-    border-radius: 50%;
-    filter: blur(80px);
-    opacity: 0.25;
-    z-index: 0;
-    animation: drift 20s ease-in-out infinite alternate;
-  }
-  .nebula-1 { width: 600px; height: 600px; background: radial-gradient(circle, #7c3aed, transparent); top: -200px; left: -100px; animation-duration: 22s; }
-  .nebula-2 { width: 500px; height: 500px; background: radial-gradient(circle, #2563eb, transparent); top: 40vh; right: -150px; animation-duration: 18s; animation-delay: -8s; }
-  .nebula-3 { width: 400px; height: 400px; background: radial-gradient(circle, #db2777, transparent); bottom: 0; left: 30%; animation-duration: 25s; animation-delay: -4s; }
+        @keyframes gridMove {
+            0% { transform: perspective(500px) rotateX(60deg) translateY(0) translateZ(-200px); }
+            100% { transform: perspective(500px) rotateX(60deg) translateY(50px) translateZ(-200px); }
+        }
 
-  @keyframes drift {
-    0% { transform: translate(0,0) scale(1); }
-    100% { transform: translate(40px, 30px) scale(1.1); }
-  }
+        /* Efek teks gradasi neon */
+        .text-gradient {
+            background: linear-gradient(90deg, #00f3ff, #b026ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
 
-  /* Layout */
-  section { position: relative; z-index: 1; }
+        /* Kaca buram (Glassmorphism) */
+        .glass-panel {
+            background: rgba(22, 22, 37, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            border-radius: 1rem;
+        }
 
-  /* ── NAV ── */
-  nav {
-    position: fixed; top:0; left:0; right:0;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 1.2rem 4rem;
-    background: rgba(2,0,16,0.6);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(124,58,237,0.2);
-    z-index: 100;
-  }
-  .logo {
-    font-family: 'Orbitron', sans-serif;
-    font-weight: 900;
-    font-size: 1.2rem;
-    letter-spacing: 4px;
-    background: linear-gradient(135deg, #7c3aed, #db2777);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  }
-  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
-  .nav-links a {
-    color: var(--text-dim);
-    text-decoration: none;
-    font-size: 0.85rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    transition: color .3s;
-    font-weight: 300;
-  }
-  .nav-links a:hover { color: var(--star-white); text-shadow: 0 0 20px var(--nebula-purple); }
+        .glass-panel:hover {
+            border-color: rgba(176, 38, 255, 0.5);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.1);
+            transition: all 0.3s ease;
+        }
 
-  /* ── HERO ── */
-  #hero {
-    min-height: 100vh;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    text-align: center;
-    padding: 2rem;
-  }
-  .hero-eyebrow {
-    font-size: 0.75rem;
-    letter-spacing: 6px;
-    text-transform: uppercase;
-    color: var(--nebula-purple);
-    margin-bottom: 1.5rem;
-    animation: fadeUp 1s ease both;
-  }
-  .hero-name {
-    font-family: 'Orbitron', sans-serif;
-    font-size: clamp(3rem, 9vw, 8rem);
-    font-weight: 900;
-    line-height: 1;
-    background: linear-gradient(135deg, #f0f4ff 0%, #7c3aed 50%, #db2777 100%);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    animation: fadeUp 1s .15s ease both;
-    letter-spacing: -2px;
-  }
-  .hero-title {
-    font-family: 'Exo 2', sans-serif;
-    font-size: clamp(1rem, 2.5vw, 1.5rem);
-    font-weight: 300;
-    font-style: italic;
-    color: var(--text-dim);
-    margin-top: 1rem;
-    animation: fadeUp 1s .3s ease both;
-    letter-spacing: 3px;
-  }
-  .hero-desc {
-    max-width: 520px;
-    margin: 2rem auto 0;
-    font-size: 1rem;
-    line-height: 1.8;
-    color: var(--text-dim);
-    font-weight: 300;
-    animation: fadeUp 1s .45s ease both;
-  }
-  .hero-cta {
-    display: flex; gap: 1.2rem; margin-top: 3rem;
-    animation: fadeUp 1s .6s ease both;
-    flex-wrap: wrap; justify-content: center;
-  }
-  .btn-primary {
-    padding: .85rem 2.2rem;
-    background: linear-gradient(135deg, var(--nebula-purple), var(--nebula-pink));
-    color: #fff;
-    border: none; border-radius: 2px;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.75rem;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    cursor: none;
-    text-decoration: none;
-    transition: box-shadow .3s, transform .3s;
-    position: relative; overflow: hidden;
-  }
-  .btn-primary::after {
-    content: '';
-    position: absolute; inset: 0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
-    opacity: 0; transition: opacity .3s;
-  }
-  .btn-primary:hover { box-shadow: var(--glow); transform: translateY(-2px); }
-  .btn-primary:hover::after { opacity: 1; }
-  .btn-outline {
-    padding: .85rem 2.2rem;
-    background: transparent;
-    border: 1px solid rgba(124,58,237,0.5);
-    color: var(--star-white);
-    border-radius: 2px;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.75rem;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    cursor: none;
-    text-decoration: none;
-    transition: border-color .3s, box-shadow .3s, transform .3s;
-  }
-  .btn-outline:hover {
-    border-color: var(--nebula-purple);
-    box-shadow: 0 0 20px rgba(124,58,237,0.3);
-    transform: translateY(-2px);
-  }
-  .scroll-hint {
-    position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
-    display: flex; flex-direction: column; align-items: center; gap: .5rem;
-    animation: fadeUp 1s .9s ease both;
-  }
-  .scroll-hint span {
-    font-size: 0.65rem; letter-spacing: 4px; text-transform: uppercase; color: var(--text-dim);
-  }
-  .scroll-line {
-    width: 1px; height: 50px;
-    background: linear-gradient(to bottom, var(--nebula-purple), transparent);
-    animation: scrollPulse 2s ease-in-out infinite;
-  }
-  @keyframes scrollPulse { 0%,100%{opacity:.3;} 50%{opacity:1;} }
+        /* Navigasi lengket */
+        nav {
+            backdrop-filter: blur(10px);
+            background: rgba(10, 10, 18, 0.8);
+            border-bottom: 1px solid rgba(0, 243, 255, 0.1);
+        }
 
-  /* ── ABOUT ── */
-  #about {
-    padding: 8rem 4rem;
-    max-width: 1100px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 5rem;
-    align-items: center;
-  }
-  .about-label {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.7rem;
-    letter-spacing: 6px;
-    color: var(--nebula-purple);
-    margin-bottom: 1rem;
-    text-transform: uppercase;
-  }
-  .about-heading {
-    font-family: 'Orbitron', sans-serif;
-    font-size: clamp(1.8rem, 3vw, 2.8rem);
-    font-weight: 700;
-    line-height: 1.2;
-    margin-bottom: 1.5rem;
-  }
-  .about-text {
-    font-size: 0.95rem;
-    line-height: 1.9;
-    color: var(--text-dim);
-    font-weight: 300;
-    margin-bottom: 1rem;
-  }
-  .about-stats {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-    margin-top: 2.5rem;
-  }
-  .stat {
-    border-left: 2px solid var(--nebula-purple);
-    padding-left: 1.2rem;
-  }
-  .stat-num {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 2rem;
-    font-weight: 900;
-    background: linear-gradient(135deg, #7c3aed, #db2777);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  }
-  .stat-label { font-size: 0.75rem; letter-spacing: 2px; color: var(--text-dim); text-transform: uppercase; margin-top: .3rem; }
+        /* Efek hover pada tombol */
+        .btn-neon {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+            z-index: 1;
+        }
+        
+        .btn-neon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 243, 255, 0.2), transparent);
+            transition: all 0.5s;
+            z-index: -1;
+        }
 
-  /* planet decoration */
-  .planet-wrap {
-    display: flex; align-items: center; justify-content: center;
-    position: relative;
-  }
-  .planet {
-    width: 260px; height: 260px;
-    border-radius: 50%;
-    background: radial-gradient(circle at 35% 35%, #4f46e5, #1e1b4b, #0a0020);
-    box-shadow: 0 0 60px rgba(79,70,229,0.4), inset -30px -20px 60px rgba(0,0,0,0.6);
-    position: relative;
-    animation: planetSpin 40s linear infinite;
-  }
-  .planet::before {
-    content: '';
-    position: absolute;
-    inset: -30px;
-    border-radius: 50%;
-    border: 2px solid rgba(124,58,237,0.2);
-    border-top-color: rgba(219,39,119,0.5);
-    animation: ringRotate 15s linear infinite;
-    transform: rotateX(70deg);
-  }
-  .planet::after {
-    content: '';
-    position: absolute; inset:-60px;
-    border-radius: 50%;
-    border: 1px solid rgba(124,58,237,0.1);
-    transform: rotateX(70deg);
-    animation: ringRotate 25s linear infinite reverse;
-  }
-  @keyframes planetSpin { to { box-shadow: 0 0 80px rgba(79,70,229,0.6), inset -30px -20px 60px rgba(0,0,0,0.6); } }
-  @keyframes ringRotate { to { transform: rotateX(70deg) rotateZ(360deg); } }
+        .btn-neon:hover::before {
+            left: 100%;
+        }
 
-  /* ── SKILLS ── */
-  #skills {
-    padding: 6rem 4rem;
-    max-width: 1100px;
-    margin: 0 auto;
-    text-align: center;
-  }
-  .section-label { font-family: 'Orbitron',sans-serif; font-size:.7rem; letter-spacing:6px; color:var(--nebula-purple); text-transform:uppercase; margin-bottom:1rem; }
-  .section-heading { font-family:'Orbitron',sans-serif; font-size:clamp(1.5rem,3vw,2.5rem); font-weight:700; margin-bottom:3.5rem; }
+        /* Area Canvas untuk efek partikel interaktif */
+        #particle-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Agar tidak menghalangi klik ke elemen di bawahnya */
+            z-index: 0;
+        }
 
-  .skills-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px,1fr));
-    gap: 1.5rem;
-  }
-  .skill-card {
-    background: rgba(124,58,237,0.05);
-    border: 1px solid rgba(124,58,237,0.2);
-    border-radius: 4px;
-    padding: 2rem 1.5rem;
-    text-align: center;
-    transition: transform .3s, box-shadow .3s, border-color .3s;
-    position: relative;
-    overflow: hidden;
-  }
-  .skill-card::before {
-    content: '';
-    position: absolute; top:0; left:0; right:0;
-    height: 2px;
-    background: linear-gradient(90deg, var(--nebula-purple), var(--nebula-pink));
-    opacity: 0; transition: opacity .3s;
-  }
-  .skill-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(124,58,237,0.2); border-color: rgba(124,58,237,0.5); }
-  .skill-card:hover::before { opacity: 1; }
-  .skill-icon { font-size: 2.2rem; margin-bottom: 1rem; }
-  .skill-name { font-family:'Orbitron',sans-serif; font-size:.75rem; letter-spacing:2px; text-transform:uppercase; margin-bottom:.8rem; }
-  .skill-bar-bg { height: 3px; background: rgba(255,255,255,0.07); border-radius:2px; }
-  .skill-bar { height:3px; border-radius:2px; background: linear-gradient(90deg, var(--nebula-purple), var(--nebula-pink)); transition: width 1.5s ease; }
-
-  /* ── PROJECTS ── */
-  #projects {
-    padding: 6rem 4rem;
-    max-width: 1200px;
-    margin: 0 auto;
-    text-align: center;
-  }
-  .projects-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px,1fr));
-    gap: 2rem;
-    margin-top: 0;
-    text-align: left;
-  }
-  .project-card {
-    background: rgba(5,0,37,0.7);
-    border: 1px solid rgba(124,58,237,0.2);
-    border-radius: 4px;
-    overflow: hidden;
-    transition: transform .3s, box-shadow .3s;
-    cursor: none;
-  }
-  .project-card:hover { transform: translateY(-8px); box-shadow: 0 30px 60px rgba(124,58,237,0.25); }
-  .project-thumb {
-    height: 200px;
-    position: relative;
-    overflow: hidden;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .project-thumb-inner {
-    width: 100%; height: 100%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 5rem;
-    position: relative;
-  }
-  .project-thumb-inner::before {
-    content: '';
-    position: absolute; inset:0;
-    opacity:.4;
-  }
-  .p1 .project-thumb-inner { background: radial-gradient(circle at 30% 30%, #4f46e5, #0a0020); }
-  .p2 .project-thumb-inner { background: radial-gradient(circle at 70% 30%, #7c3aed, #1a0040); }
-  .p3 .project-thumb-inner { background: radial-gradient(circle at 50% 70%, #db2777, #0a0020); }
-  .project-body { padding: 1.8rem; }
-  .project-tag {
-    font-size: .65rem; letter-spacing:3px; text-transform:uppercase;
-    color: var(--nebula-purple); margin-bottom:.7rem; font-family:'Orbitron',sans-serif;
-  }
-  .project-name { font-family:'Orbitron',sans-serif; font-size:1.1rem; font-weight:700; margin-bottom:.8rem; }
-  .project-desc { font-size:.9rem; color:var(--text-dim); line-height:1.7; font-weight:300; }
-  .project-footer {
-    display: flex; gap: 1rem; padding: 1.2rem 1.8rem;
-    border-top: 1px solid rgba(124,58,237,0.1);
-  }
-  .project-link {
-    font-size:.7rem; letter-spacing:2px; text-transform:uppercase;
-    color: var(--text-dim); text-decoration:none;
-    font-family:'Orbitron',sans-serif;
-    transition: color .3s;
-  }
-  .project-link:hover { color: var(--nebula-pink); }
-
-  /* ── CONTACT ── */
-  #contact {
-    padding: 8rem 4rem;
-    max-width: 700px;
-    margin: 0 auto;
-    text-align: center;
-  }
-  .contact-glow {
-    font-family:'Orbitron',sans-serif;
-    font-size:clamp(2rem,5vw,4rem);
-    font-weight:900;
-    background: linear-gradient(135deg, #f0f4ff, #7c3aed, #db2777);
-    -webkit-background-clip: text; -webkit-text-fill-color:transparent;
-    margin-bottom:1.5rem;
-    line-height:1.1;
-  }
-  .contact-sub { color:var(--text-dim); font-size:1rem; line-height:1.8; margin-bottom:3rem; font-weight:300; }
-  .contact-links { display:flex; gap:1.5rem; justify-content:center; flex-wrap:wrap; }
-  .contact-link {
-    display:flex; align-items:center; gap:.7rem;
-    padding:.9rem 1.8rem;
-    border:1px solid rgba(124,58,237,0.3);
-    border-radius:2px;
-    color:var(--star-white);
-    text-decoration:none;
-    font-family:'Orbitron',sans-serif;
-    font-size:.7rem;
-    letter-spacing:2px;
-    text-transform:uppercase;
-    transition: border-color .3s, box-shadow .3s, transform .3s;
-    cursor: none;
-  }
-  .contact-link:hover { border-color:var(--nebula-purple); box-shadow:0 0 20px rgba(124,58,237,0.3); transform:translateY(-3px); }
-
-  /* ── FOOTER ── */
-  footer {
-    padding: 2rem 4rem;
-    border-top: 1px solid rgba(124,58,237,0.15);
-    display:flex; justify-content:space-between; align-items:center;
-    font-size:.75rem; color:var(--text-dim); letter-spacing:2px;
-    position:relative; z-index:1;
-  }
-
-  /* Animations */
-  @keyframes fadeUp {
-    from { opacity:0; transform:translateY(30px); }
-    to { opacity:1; transform:translateY(0); }
-  }
-  .reveal { opacity:0; transform:translateY(40px); transition: opacity .8s ease, transform .8s ease; }
-  .reveal.visible { opacity:1; transform:translateY(0); }
-
-  @media (max-width:768px) {
-    nav { padding:1rem 1.5rem; }
-    .nav-links { display:none; }
-    #about { grid-template-columns:1fr; padding:5rem 1.5rem; gap:3rem; }
-    #skills, #projects, #contact { padding:5rem 1.5rem; }
-    .planet-wrap { order:-1; }
-    .planet { width:180px; height:180px; }
-    footer { flex-direction:column; gap:1rem; text-align:center; padding:2rem 1.5rem; }
-  }
-</style>
+        /* Style untuk terminal log */
+        .terminal-log {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
+            color: #4ade80; /* Warna hijau matrix */
+        }
+        .log-line {
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeInUp 0.5s forwards;
+        }
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
-<body>
+<body class="antialiased selection:bg-neon-purple selection:text-white relative">
 
-<!-- Custom cursor -->
-<div id="cursor"></div>
-<div id="cursor-dot"></div>
+    <!-- Background Animasi -->
+    <div class="bg-grid"></div>
+    
+    <!-- Efek cahaya blob di latar belakang -->
+    <div class="fixed top-20 left-20 w-96 h-96 bg-neon-cyan rounded-full mix-blend-screen filter blur-[100px] opacity-20 z-[-1] animate-pulse-slow"></div>
+    <div class="fixed bottom-20 right-20 w-96 h-96 bg-neon-purple rounded-full mix-blend-screen filter blur-[100px] opacity-20 z-[-1] animate-pulse-slow" style="animation-delay: 1.5s;"></div>
 
-<!-- Canvas starfield -->
-<canvas id="starfield"></canvas>
+    <!-- Navigasi -->
+    <nav class="fixed w-full z-50 transition-all duration-300 py-4 px-6 md:px-12 flex justify-between items-center">
+        <a href="#" class="font-tech text-xl font-bold flex items-center gap-2 group">
+            <i class="fa-solid fa-microchip text-neon-cyan group-hover:rotate-180 transition-transform duration-500"></i>
+            <span class="text-white">A.Nawansyah</span>
+        </a>
+        
+        <div class="hidden md:flex gap-8 font-tech text-sm">
+            <a href="#about" class="hover:text-neon-cyan transition-colors">>> Tentang</a>
+            <a href="#skills" class="hover:text-neon-cyan transition-colors">>> Keahlian</a>
+            <a href="#projects" class="hover:text-neon-cyan transition-colors">>> Proyek</a>
+            <a href="#contact" class="hover:text-neon-cyan transition-colors">>> Kontak</a>
+        </div>
 
-<!-- Nebula blobs -->
-<div class="nebula nebula-1"></div>
-<div class="nebula nebula-2"></div>
-<div class="nebula nebula-3"></div>
+        <a href="#contact" class="hidden md:block btn-neon border border-neon-cyan text-neon-cyan px-4 py-2 rounded font-tech text-sm hover:bg-neon-cyan hover:text-dark-bg transition-colors">
+            Init Connection()
+        </a>
 
-<!-- ── Navigation ── -->
-<nav>
-  <div class="logo">Anang.DEV</div>
-  <ul class="nav-links">
-    <li><a href="#about">Tentang</a></li>
-    <li><a href="#skills">Keahlian</a></li>
-    <li><a href="#projects">Proyek</a></li>
-    <li><a href="#contact">Kontak</a></li>
-  </ul>
-</nav>
+        <!-- Tombol Menu Mobile -->
+        <button class="md:hidden text-2xl text-neon-cyan focus:outline-none" onclick="toggleMenu()">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+    </nav>
 
-<!-- ── Hero ── -->
-<section id="hero">
-  <p class="hero-eyebrow">✦ Selamat Datang di Alam Semesta Saya ✦</p>
-  <h1 class="hero-name">Anang<br>Nawansyah</h1>
-  <p class="hero-title">Full-Stack Developer &amp; UI Explorer</p>
-  <p class="hero-desc">Saya membangun pengalaman digital yang melampaui batas, seperti bintang-bintang yang menerangi kegelapan galaksi.</p>
-  <div class="hero-cta">
-    <a href="#projects" class="btn-primary">Lihat Proyek</a>
-    <a href="#contact" class="btn-outline">Hubungi Saya</a>
-  </div>
-  <div class="scroll-hint">
-    <span>Scroll</span>
-    <div class="scroll-line"></div>
-  </div>
-</section>
-
-<!-- ── About ── -->
-<section id="about">
-  <div>
-    <p class="about-label reveal">// tentang saya</p>
-    <h2 class="about-heading reveal">Menjelajahi Batas<br>Kreativitas Digital</h2>
-    <p class="about-text reveal">Saya adalah seorang developer dengan hasrat yang dalam untuk menciptakan antarmuka yang indah dan fungsional. Seperti seorang astronom yang memetakan bintang, saya memetakan setiap piksel dengan penuh perhatian.</p>
-    <p class="about-text reveal">Dengan pengalaman lebih dari 5 tahun di industri teknologi, saya telah membantu berbagai startup dan perusahaan mewujudkan visi digital mereka.</p>
-    <div class="about-stats">
-      <div class="stat reveal">
-        <div class="stat-num">50+</div>
-        <div class="stat-label">Proyek Selesai</div>
-      </div>
-      <div class="stat reveal">
-        <div class="stat-num">5+</div>
-        <div class="stat-label">Tahun Pengalaman</div>
-      </div>
-      <div class="stat reveal">
-        <div class="stat-num">30+</div>
-        <div class="stat-label">Klien Puas</div>
-      </div>
-      <div class="stat reveal">
-        <div class="stat-num">12</div>
-        <div class="stat-label">Penghargaan</div>
-      </div>
+    <!-- Menu Mobile (Tersembunyi secara default) -->
+    <div id="mobile-menu" class="fixed inset-0 bg-dark-bg/95 backdrop-blur-xl z-40 hidden flex-col items-center justify-center gap-8 font-tech text-xl pt-20">
+        <button class="absolute top-6 right-6 text-3xl text-neon-cyan" onclick="toggleMenu()">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <a href="#about" onclick="toggleMenu()" class="hover:text-neon-cyan">>> Tentang_Saya</a>
+        <a href="#skills" onclick="toggleMenu()" class="hover:text-neon-cyan">>> Stack_Teknologi</a>
+        <a href="#projects" onclick="toggleMenu()" class="hover:text-neon-cyan">>> Repositori_Proyek</a>
+        <a href="#contact" onclick="toggleMenu()" class="hover:text-neon-cyan">>> Ping_Saya</a>
     </div>
-  </div>
-  <div class="planet-wrap reveal">
-    <div class="planet"></div>
-  </div>
-</section>
 
-<!-- ── Skills ── -->
-<section id="skills">
-  <p class="section-label reveal">// keahlian</p>
-  <h2 class="section-heading reveal">Konstelasi Kemampuan</h2>
-  <div class="skills-grid">
-    <div class="skill-card reveal">
-      <div class="skill-icon">⚡</div>
-      <div class="skill-name">React / Next.js</div>
-      <div class="skill-bar-bg"><div class="skill-bar" style="width:0%" data-width="92%"></div></div>
-    </div>
-    <div class="skill-card reveal">
-      <div class="skill-icon">🌌</div>
-      <div class="skill-name">TypeScript</div>
-      <div class="skill-bar-bg"><div class="skill-bar" style="width:0%" data-width="88%"></div></div>
-    </div>
-    <div class="skill-card reveal">
-      <div class="skill-icon">🚀</div>
-      <div class="skill-name">Node.js</div>
-      <div class="skill-bar-bg"><div class="skill-bar" style="width:0%" data-width="85%"></div></div>
-    </div>
-    <div class="skill-card reveal">
-      <div class="skill-icon">🪐</div>
-      <div class="skill-name">UI/UX Design</div>
-      <div class="skill-bar-bg"><div class="skill-bar" style="width:0%" data-width="90%"></div></div>
-    </div>
-    <div class="skill-card reveal">
-      <div class="skill-icon">🔭</div>
-      <div class="skill-name">Python</div>
-      <div class="skill-bar-bg"><div class="skill-bar" style="width:0%" data-width="78%"></div></div>
-    </div>
-    <div class="skill-card reveal">
-      <div class="skill-icon">✨</div>
-      <div class="skill-name">Cloud / DevOps</div>
-      <div class="skill-bar-bg"><div class="skill-bar" style="width:0%" data-width="80%"></div></div>
-    </div>
-  </div>
-</section>
+    <!-- Section Hero -->
+    <header class="relative min-h-screen flex items-center justify-center pt-20 px-6 overflow-hidden">
+        <canvas id="particle-canvas"></canvas>
+        
+        <div class="max-w-4xl mx-auto text-center relative z-10 flex flex-col items-center">
+            
+            <!-- Terminal Dummy Kecil -->
+            <div class="mb-6 glass-panel px-4 py-2 rounded-md flex items-center gap-3 w-fit mx-auto border-neon-cyan/30">
+                <div class="w-2 h-2 rounded-full bg-red-500"></div>
+                <div class="w-2 h-2 rounded-full bg-yellow-500"></div>
+                <div class="w-2 h-2 rounded-full bg-green-500"></div>
+                <span class="font-tech text-xs text-gray-400 ml-2">anang@neural-net:~$ ./startup.sh</span>
+            </div>
 
-<!-- ── Projects ── -->
-<section id="projects">
-  <p class="section-label reveal">// proyek</p>
-  <h2 class="section-heading reveal">Orbit Karya Terbaik</h2>
-  <div class="projects-grid">
-    <div class="project-card p1 reveal">
-      <div class="project-thumb">
-        <div class="project-thumb-inner">🌠</div>
-      </div>
-      <div class="project-body">
-        <p class="project-tag">Web App</p>
-        <h3 class="project-name">Starmap Dashboard</h3>
-        <p class="project-desc">Platform analitik real-time dengan visualisasi data interaktif yang terinspirasi dari peta bintang astronomi.</p>
-      </div>
-      <div class="project-footer">
-        <a href="#" class="project-link">↗ Live Demo</a>
-        <a href="#" class="project-link">⌥ GitHub</a>
-      </div>
-    </div>
-    <div class="project-card p2 reveal">
-      <div class="project-thumb">
-        <div class="project-thumb-inner">🪐</div>
-      </div>
-      <div class="project-body">
-        <p class="project-tag">Mobile App</p>
-        <h3 class="project-name">Nebula Commerce</h3>
-        <p class="project-desc">Aplikasi e-commerce dengan pengalaman belanja yang imersif dan animasi transisi yang memukau pengguna.</p>
-      </div>
-      <div class="project-footer">
-        <a href="#" class="project-link">↗ Live Demo</a>
-        <a href="#" class="project-link">⌥ GitHub</a>
-      </div>
-    </div>
-    <div class="project-card p3 reveal">
-      <div class="project-thumb">
-        <div class="project-thumb-inner">🌌</div>
-      </div>
-      <div class="project-body">
-        <p class="project-tag">AI Platform</p>
-        <h3 class="project-name">Cosmos AI Writer</h3>
-        <p class="project-desc">Tools penulisan berbasis AI yang membantu kreator konten menghasilkan narasi yang memikat dan orisinal.</p>
-      </div>
-      <div class="project-footer">
-        <a href="#" class="project-link">↗ Live Demo</a>
-        <a href="#" class="project-link">⌥ GitHub</a>
-      </div>
-    </div>
-  </div>
-</section>
+            <h2 class="font-tech text-neon-cyan mb-4 tracking-widest uppercase text-sm md:text-base opacity-0 translate-y-4" id="hero-subtitle">
+                <i class="fa-solid fa-robot mr-2"></i> Sistem Siap: Mode Operasional Aktif
+            </h2>
+            
+            <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight opacity-0 translate-y-4" id="hero-title">
+                Halo, Saya <br/>
+                <span class="text-gradient">Anang Nawansyah</span>
+            </h1>
+            
+            <p class="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-10 opacity-0 translate-y-4" id="hero-desc">
+                Insinyur Kecerdasan Buatan & Pengembang Robotika. Saya membangun sistem otonom dan mengimplementasikan model machine learning untuk memecahkan masalah dunia nyata.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 opacity-0 translate-y-4" id="hero-btns">
+                <a href="#projects" class="btn-neon bg-transparent border border-neon-cyan text-neon-cyan px-8 py-3 rounded-md font-tech font-bold hover:bg-neon-cyan hover:text-dark-bg hover:shadow-[0_0_20px_rgba(0,243,255,0.4)] transition-all">
+                    Jelajahi Proyek ->
+                </a>
+                <a href="#contact" class="btn-neon bg-dark-surface border border-neon-purple text-white px-8 py-3 rounded-md font-tech hover:border-neon-cyan transition-colors flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-github"></i> Akses Repositori
+                </a>
+            </div>
+        </div>
 
-<!-- ── Contact ── -->
-<section id="contact">
-  <p class="section-label reveal">// kontak</p>
-  <h2 class="contact-glow reveal">Mari Berkolaborasi</h2>
-  <p class="contact-sub reveal">Punya proyek yang ingin Anda wujudkan? Saya siap membantu menjadikannya nyata — dari konsep hingga peluncuran.</p>
-  <div class="contact-links reveal">
-    <a href="mailto:anang.nawansyah@gmail.com" class="contact-link">✉ Email Saya</a>
-    <a href="#" class="contact-link">in LinkedIn</a>
-    <a href="#" class="contact-link">⌥ GitHub</a>
-  </div>
-</section>
+        <!-- Dekorasi scroll -->
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center animate-bounce">
+            <span class="font-tech text-xs text-gray-500 mb-2">SCROLL_DOWN</span>
+            <i class="fa-solid fa-angle-down text-neon-cyan"></i>
+        </div>
+    </header>
 
-<!-- ── Footer ── -->
-<footer>
-  <span>© 2026 Anang Nawansyah</span>
-  <span>DIBUAT DENGAN ✦ DI GALAKSI</span>
-</footer>
+    <!-- Section Tentang Saya -->
+    <section id="about" class="py-20 px-6 relative">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex flex-col lg:flex-row gap-12 items-center">
+                
+                <!-- Sisi Kiri: Visual / Profil -->
+                <div class="w-full lg:w-1/2 relative">
+                    <!-- Bingkai dekoratif -->
+                    <div class="absolute inset-0 border-2 border-neon-cyan/20 rounded-2xl transform translate-x-4 translate-y-4"></div>
+                    <div class="absolute inset-0 bg-gradient-to-tr from-neon-purple/20 to-neon-cyan/20 rounded-2xl animate-pulse-slow blur-xl"></div>
+                    
+                    <div class="glass-panel p-6 relative z-10 w-full h-[400px] flex flex-col">
+                        <!-- Header 'Window' -->
+                        <div class="flex justify-between items-center border-b border-gray-700 pb-3 mb-4">
+                            <span class="font-tech text-xs text-neon-cyan">profil_subjek.dat</span>
+                            <i class="fa-solid fa-expand text-gray-500 text-xs"></i>
+                        </div>
+                        
+                        <!-- Konten Profil Simulasi -->
+                        <div class="flex-1 overflow-hidden relative">
+                            <!-- Placeholder Gambar Avatar AI (Menggunakan icon besar sbg ganti foto asli agar terlihat futuristik) -->
+                            <div class="absolute inset-0 flex items-center justify-center opacity-10">
+                                <i class="fa-solid fa-brain text-[200px] text-neon-cyan"></i>
+                            </div>
+                            
+                            <div class="relative z-10 font-tech text-sm text-gray-300 space-y-3 terminal-log" id="profile-log">
+                                <!-- Log akan diisi oleh JS -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-<script>
-// ── Custom cursor ──
-const cursor = document.getElementById('cursor');
-const dot = document.getElementById('cursor-dot');
-document.addEventListener('mousemove', e => {
-  cursor.style.left = e.clientX + 'px';
-  cursor.style.top = e.clientY + 'px';
-  dot.style.left = e.clientX + 'px';
-  dot.style.top = e.clientY + 'px';
-});
+                <!-- Sisi Kanan: Teks -->
+                <div class="w-full lg:w-1/2">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6 flex items-center gap-3">
+                        <i class="fa-solid fa-terminal text-neon-purple"></i> 
+                        <span>Data<span class="text-neon-cyan">_Pribadi</span></span>
+                    </h2>
+                    <p class="text-gray-400 mb-6 leading-relaxed text-lg">
+                        Saya adalah seorang <span class="text-white font-semibold">AI Engineer</span> dan antusias <span class="text-white font-semibold">Robotika</span> yang berdedikasi untuk menjembatani kesenjangan antara perangkat keras fisik dan algoritma cerdas. 
+                    </p>
+                    <p class="text-gray-400 mb-8 leading-relaxed text-lg">
+                        Fokus utama saya meliputi Computer Vision untuk robot, Reinforcement Learning untuk pergerakan otonom, dan optimalisasi model Edge AI agar dapat berjalan secara efisien pada mikrokontroler. Saya percaya bahwa integrasi AI ke dalam robotika akan membentuk ulang masa depan industri dan kehidupan sehari-hari.
+                    </p>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="glass-panel p-4 flex items-start gap-4">
+                            <i class="fa-solid fa-code-branch text-2xl text-neon-cyan mt-1"></i>
+                            <div>
+                                <h4 class="font-bold text-white">Machine Learning</h4>
+                                <p class="text-xs text-gray-400 font-tech mt-1">TensorFlow, PyTorch</p>
+                            </div>
+                        </div>
+                        <div class="glass-panel p-4 flex items-start gap-4">
+                            <i class="fa-solid fa-microchip text-2xl text-neon-purple mt-1"></i>
+                            <div>
+                                <h4 class="font-bold text-white">Sistem Embedded</h4>
+                                <p class="text-xs text-gray-400 font-tech mt-1">Raspberry Pi, Arduino</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-// ── Starfield canvas ──
-const canvas = document.getElementById('starfield');
-const ctx = canvas.getContext('2d');
-let stars = [];
+            </div>
+        </div>
+    </section>
 
-function resize() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
+    <!-- Section Stack Teknologi -->
+    <section id="skills" class="py-20 px-6 bg-dark-surface/50 border-y border-neon-cyan/10">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16">
+                <p class="font-tech text-neon-cyan text-sm mb-2">// dependensi_sistem.json</p>
+                <h2 class="text-3xl md:text-5xl font-bold">Teknologi & <span class="text-neon-purple">Spesifikasi</span></h2>
+            </div>
 
-function initStars() {
-  stars = [];
-  const count = Math.floor((canvas.width * canvas.height) / 3000);
-  for (let i = 0; i < count; i++) {
-    stars.push({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      r: Math.random() * 1.5,
-      o: Math.random(),
-      s: Math.random() * 0.5 + 0.1,
-      phase: Math.random() * Math.PI * 2,
-      color: ['#ffffff','#c4b5fd','#93c5fd','#fbcfe8'][Math.floor(Math.random()*4)]
-    });
-  }
-}
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                
+                <!-- Skill Item 1 -->
+                <div class="glass-panel p-6 flex flex-col items-center justify-center text-center group cursor-pointer">
+                    <i class="fa-brands fa-python text-5xl text-gray-500 group-hover:text-[#3776AB] transition-colors duration-300 mb-4"></i>
+                    <h3 class="font-bold mb-1">Python</h3>
+                    <p class="font-tech text-xs text-neon-cyan opacity-0 group-hover:opacity-100 transition-opacity">Inti AI/ML</p>
+                </div>
+                
+                <!-- Skill Item 2 -->
+                <div class="glass-panel p-6 flex flex-col items-center justify-center text-center group cursor-pointer">
+                    <div class="relative w-12 h-12 mb-4 grayscale group-hover:grayscale-0 transition-all duration-300 flex justify-center items-center">
+                        <i class="fa-solid fa-c text-5xl text-gray-500 group-hover:text-[#00599C]"></i><span class="text-3xl font-bold font-mono text-gray-500 group-hover:text-[#00599C] ml-1">++</span>
+                    </div>
+                    <h3 class="font-bold mb-1">C / C++</h3>
+                    <p class="font-tech text-xs text-neon-cyan opacity-0 group-hover:opacity-100 transition-opacity">Performa Robotika</p>
+                </div>
 
-function drawStars(t) {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  stars.forEach(star => {
-    const opacity = 0.3 + 0.7 * Math.abs(Math.sin(t * star.s * 0.001 + star.phase));
-    ctx.beginPath();
-    ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
-    ctx.fillStyle = star.color;
-    ctx.globalAlpha = opacity;
-    ctx.fill();
-  });
-  ctx.globalAlpha = 1;
-}
+                <!-- Skill Item 3 -->
+                <div class="glass-panel p-6 flex flex-col items-center justify-center text-center group cursor-pointer">
+                    <i class="fa-solid fa-cube text-5xl text-gray-500 group-hover:text-[#ff3300] transition-colors duration-300 mb-4"></i>
+                    <h3 class="font-bold mb-1">TensorFlow</h3>
+                    <p class="font-tech text-xs text-neon-cyan opacity-0 group-hover:opacity-100 transition-opacity">Deep Learning</p>
+                </div>
 
-// Shooting stars
-let shooters = [];
-function spawnShooter() {
-  shooters.push({
-    x: Math.random() * canvas.width * 0.7,
-    y: Math.random() * canvas.height * 0.3,
-    vx: 6 + Math.random() * 4,
-    vy: 3 + Math.random() * 3,
-    life: 1,
-    len: 80 + Math.random() * 60
-  });
-}
-setInterval(spawnShooter, 3000);
+                <!-- Skill Item 4 -->
+                <div class="glass-panel p-6 flex flex-col items-center justify-center text-center group cursor-pointer">
+                    <i class="fa-solid fa-eye text-5xl text-gray-500 group-hover:text-green-500 transition-colors duration-300 mb-4"></i>
+                    <h3 class="font-bold mb-1">OpenCV</h3>
+                    <p class="font-tech text-xs text-neon-cyan opacity-0 group-hover:opacity-100 transition-opacity">Computer Vision</p>
+                </div>
 
-function drawShooters() {
-  shooters = shooters.filter(s => s.life > 0);
-  shooters.forEach(s => {
-    const grad = ctx.createLinearGradient(s.x, s.y, s.x - s.vx * s.len * 0.1, s.y - s.vy * s.len * 0.1);
-    grad.addColorStop(0, `rgba(196,181,253,${s.life})`);
-    grad.addColorStop(1, 'transparent');
-    ctx.beginPath();
-    ctx.moveTo(s.x, s.y);
-    ctx.lineTo(s.x - s.vx * s.len * 0.1, s.y - s.vy * s.len * 0.1);
-    ctx.strokeStyle = grad;
-    ctx.lineWidth = 2;
-    ctx.stroke();
-    s.x += s.vx;
-    s.y += s.vy;
-    s.life -= 0.02;
-  });
-}
+                <!-- Skill Item 5 -->
+                <div class="glass-panel p-6 flex flex-col items-center justify-center text-center group cursor-pointer">
+                    <i class="fa-solid fa-robot text-5xl text-gray-500 group-hover:text-white transition-colors duration-300 mb-4"></i>
+                    <h3 class="font-bold mb-1">ROS</h3>
+                    <p class="font-tech text-xs text-neon-cyan opacity-0 group-hover:opacity-100 transition-opacity">Robot Operating System</p>
+                </div>
 
-function animate(t) {
-  drawStars(t);
-  drawShooters();
-  requestAnimationFrame(animate);
-}
+                <!-- Skill Item 6 -->
+                <div class="glass-panel p-6 flex flex-col items-center justify-center text-center group cursor-pointer">
+                    <i class="fa-solid fa-cloud text-5xl text-gray-500 group-hover:text-blue-400 transition-colors duration-300 mb-4"></i>
+                    <h3 class="font-bold mb-1">Cloud AI</h3>
+                    <p class="font-tech text-xs text-neon-cyan opacity-0 group-hover:opacity-100 transition-opacity">AWS / GCP</p>
+                </div>
 
-window.addEventListener('resize', () => { resize(); initStars(); });
-resize(); initStars(); animate(0);
+                <!-- Skill Item 7 -->
+                <div class="glass-panel p-6 flex flex-col items-center justify-center text-center group cursor-pointer">
+                    <i class="fa-solid fa-network-wired text-5xl text-gray-500 group-hover:text-yellow-500 transition-colors duration-300 mb-4"></i>
+                    <h3 class="font-bold mb-1">PyTorch</h3>
+                    <p class="font-tech text-xs text-neon-cyan opacity-0 group-hover:opacity-100 transition-opacity">Neural Networks</p>
+                </div>
 
-// ── Scroll reveal ──
-const reveals = document.querySelectorAll('.reveal');
-const observer = new IntersectionObserver(entries => {
-  entries.forEach((entry, i) => {
-    if (entry.isIntersecting) {
-      setTimeout(() => entry.target.classList.add('visible'), i * 80);
-    }
-  });
-}, { threshold: 0.1 });
-reveals.forEach(el => observer.observe(el));
+                <!-- Skill Item 8 -->
+                <div class="glass-panel p-6 flex flex-col items-center justify-center text-center group cursor-pointer">
+                    <i class="fa-brands fa-git-alt text-5xl text-gray-500 group-hover:text-[#F05032] transition-colors duration-300 mb-4"></i>
+                    <h3 class="font-bold mb-1">Git</h3>
+                    <p class="font-tech text-xs text-neon-cyan opacity-0 group-hover:opacity-100 transition-opacity">Version Control</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-// ── Skill bars animate on reveal ──
-const barObserver = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      const bars = entry.target.querySelectorAll('.skill-bar');
-      bars.forEach(bar => {
-        setTimeout(() => {
-          bar.style.width = bar.dataset.width;
-        }, 300);
-      });
-    }
-  });
-}, { threshold: 0.2 });
-document.querySelectorAll('#skills').forEach(el => barObserver.observe(el));
-</script>
+    <!-- Section Proyek -->
+    <section id="projects" class="py-20 px-6 relative">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex items-center justify-between mb-12">
+                <div>
+                    <h2 class="text-3xl md:text-4xl font-bold flex items-center gap-3">
+                        <i class="fa-solid fa-folder-tree text-neon-cyan"></i> 
+                        <span>Modul_<span class="text-neon-purple">Proyek</span></span>
+                    </h2>
+                </div>
+                <div class="hidden md:flex gap-2">
+                    <span class="w-3 h-3 rounded-full bg-neon-cyan animate-pulse"></span>
+                    <span class="w-3 h-3 rounded-full bg-neon-purple animate-pulse" style="animation-delay: 0.5s"></span>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- Project 1 -->
+                <div class="glass-panel overflow-hidden group flex flex-col h-full border-t-2 border-t-neon-cyan/50">
+                    <div class="h-48 bg-gray-800 relative overflow-hidden flex items-center justify-center">
+                        <div class="absolute inset-0 bg-black/50 z-10 group-hover:bg-transparent transition-colors duration-300"></div>
+                        <!-- Simulasi gambar proyek dengan Icon -->
+                        <i class="fa-solid fa-car-side text-7xl text-gray-600 group-hover:text-neon-cyan group-hover:scale-110 transition-all duration-500 z-0"></i>
+                        <div class="absolute bottom-2 right-2 z-20 font-tech text-[10px] text-neon-cyan bg-black/70 px-2 py-1 rounded">v2.1.0</div>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-bold">AutoNav Rover</h3>
+                            <a href="#" class="text-gray-400 hover:text-white transition-colors"><i class="fa-brands fa-github text-xl"></i></a>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-4 flex-1">Robot beroda empat otonom yang menggunakan kombinasi sensor LIDAR dan kamera (OpenCV) untuk pemetaan ruang (SLAM) dan navigasi menghindari rintangan secara real-time.</p>
+                        <div class="flex flex-wrap gap-2 mt-auto">
+                            <span class="text-[10px] font-tech px-2 py-1 bg-neon-cyan/10 text-neon-cyan border border-neon-cyan/20 rounded">ROS</span>
+                            <span class="text-[10px] font-tech px-2 py-1 bg-neon-cyan/10 text-neon-cyan border border-neon-cyan/20 rounded">Python</span>
+                            <span class="text-[10px] font-tech px-2 py-1 bg-neon-cyan/10 text-neon-cyan border border-neon-cyan/20 rounded">LIDAR</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="glass-panel overflow-hidden group flex flex-col h-full border-t-2 border-t-neon-purple/50">
+                    <div class="h-48 bg-gray-800 relative overflow-hidden flex items-center justify-center">
+                        <div class="absolute inset-0 bg-black/50 z-10 group-hover:bg-transparent transition-colors duration-300"></div>
+                        <i class="fa-solid fa-hand-sparkles text-7xl text-gray-600 group-hover:text-neon-purple group-hover:scale-110 transition-all duration-500 z-0"></i>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-bold">NeuroGrasp Arm</h3>
+                            <a href="#" class="text-gray-400 hover:text-white transition-colors"><i class="fa-brands fa-github text-xl"></i></a>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-4 flex-1">Lengan robot 6-DOF yang dikendalikan oleh model Deep Reinforcement Learning. Dilatih dalam simulasi (Gazebo) sebelum di-deploy ke hardware fisik untuk mengambil objek acak.</p>
+                        <div class="flex flex-wrap gap-2 mt-auto">
+                            <span class="text-[10px] font-tech px-2 py-1 bg-neon-purple/10 text-neon-purple border border-neon-purple/20 rounded">TensorFlow</span>
+                            <span class="text-[10px] font-tech px-2 py-1 bg-neon-purple/10 text-neon-purple border border-neon-purple/20 rounded">C++</span>
+                            <span class="text-[10px] font-tech px-2 py-1 bg-neon-purple/10 text-neon-purple border border-neon-purple/20 rounded">RL</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="glass-panel overflow-hidden group flex flex-col h-full border-t-2 border-t-green-500/50">
+                    <div class="h-48 bg-gray-800 relative overflow-hidden flex items-center justify-center">
+                        <div class="absolute inset-0 bg-black/50 z-10 group-hover:bg-transparent transition-colors duration-300"></div>
+                        <i class="fa-solid fa-leaf text-7xl text-gray-600 group-hover:text-green-500 group-hover:scale-110 transition-all duration-500 z-0"></i>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-bold">AgriVision Drone</h3>
+                            <a href="#" class="text-gray-400 hover:text-white transition-colors"><i class="fa-solid fa-link text-xl"></i></a>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-4 flex-1">Sistem deteksi penyakit tanaman berbasis drone. Menggunakan arsitektur CNN ringan yang berjalan pada Edge TPU (Coral) langsung di atas drone untuk analisis tanpa internet.</p>
+                        <div class="flex flex-wrap gap-2 mt-auto">
+                            <span class="text-[10px] font-tech px-2 py-1 bg-green-500/10 text-green-400 border border-green-500/20 rounded">Edge AI</span>
+                            <span class="text-[10px] font-tech px-2 py-1 bg-green-500/10 text-green-400 border border-green-500/20 rounded">PyTorch Mobile</span>
+                            <span class="text-[10px] font-tech px-2 py-1 bg-green-500/10 text-green-400 border border-green-500/20 rounded">YOLOv8</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            
+            <div class="text-center mt-12">
+                <a href="#" class="inline-block font-tech text-neon-cyan hover:text-neon-purple hover:underline transition-colors">
+                    $ tampilkan_semua_proyek()
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Kontak -->
+    <section id="contact" class="py-20 px-6">
+        <div class="max-w-4xl mx-auto">
+            <div class="glass-panel p-8 md:p-12 border-neon-purple/30 relative overflow-hidden">
+                <!-- Dekorasi -->
+                <div class="absolute top-0 right-0 w-32 h-32 bg-neon-purple/20 rounded-full mix-blend-screen filter blur-[50px]"></div>
+                
+                <div class="text-center mb-10 relative z-10">
+                    <h2 class="text-3xl md:text-5xl font-bold mb-4">Inisiasi <span class="text-neon-cyan">Koneksi</span></h2>
+                    <p class="text-gray-400">Punya ide proyek AI atau butuh solusi robotika? Mari berkolaborasi.</p>
+                </div>
+
+                <form id="contact-form" class="space-y-6 relative z-10" onsubmit="event.preventDefault(); submitForm();">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="font-tech text-xs text-neon-cyan pl-1">Input ID Pengirim:</label>
+                            <input type="text" required placeholder="Nama Anda" class="w-full bg-dark-bg border border-gray-700 rounded-md px-4 py-3 text-white focus:outline-none focus:border-neon-cyan focus:ring-1 focus:ring-neon-cyan transition-colors font-sans">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="font-tech text-xs text-neon-cyan pl-1">Saluran Balasan (Email):</label>
+                            <input type="email" required placeholder="email@domain.com" class="w-full bg-dark-bg border border-gray-700 rounded-md px-4 py-3 text-white focus:outline-none focus:border-neon-cyan focus:ring-1 focus:ring-neon-cyan transition-colors font-sans">
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="font-tech text-xs text-neon-cyan pl-1">Payload Pesan:</label>
+                        <textarea required rows="4" placeholder="Tulis pesan atau spesifikasi proyek di sini..." class="w-full bg-dark-bg border border-gray-700 rounded-md px-4 py-3 text-white focus:outline-none focus:border-neon-purple focus:ring-1 focus:ring-neon-purple transition-colors font-sans resize-none"></textarea>
+                    </div>
+                    
+                    <button type="submit" id="submit-btn" class="w-full btn-neon bg-dark-surface border border-neon-cyan text-neon-cyan py-4 rounded-md font-tech font-bold text-lg hover:bg-neon-cyan hover:text-dark-bg transition-colors flex justify-center items-center gap-2">
+                        <span>Execute -> Transmit</span>
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                    
+                    <!-- Pesan Status Sukses -->
+                    <div id="success-msg" class="hidden text-center text-green-400 font-tech mt-4 border border-green-500/30 bg-green-500/10 py-2 rounded">
+                        [SUCCESS] Paket data terkirim. Menunggu respons server...
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-gray-800 bg-dark-bg pt-12 pb-6 px-6 text-center">
+        <div class="flex justify-center gap-6 mb-8">
+            <a href="#" class="w-12 h-12 rounded-full glass-panel flex items-center justify-center text-gray-400 hover:text-neon-cyan hover:border-neon-cyan transition-all duration-300 transform hover:-translate-y-1">
+                <i class="fa-brands fa-github text-xl"></i>
+            </a>
+            <a href="#" class="w-12 h-12 rounded-full glass-panel flex items-center justify-center text-gray-400 hover:text-[#0A66C2] hover:border-[#0A66C2] transition-all duration-300 transform hover:-translate-y-1">
+                <i class="fa-brands fa-linkedin-in text-xl"></i>
+            </a>
+            <a href="#" class="w-12 h-12 rounded-full glass-panel flex items-center justify-center text-gray-400 hover:text-neon-purple hover:border-neon-purple transition-all duration-300 transform hover:-translate-y-1">
+                <i class="fa-brands fa-twitter text-xl"></i>
+            </a>
+        </div>
+        <p class="font-tech text-gray-500 text-sm">
+            &copy; 2026 Anang Nawansyah. <br class="md:hidden"/> <span class="hidden md:inline">|</span> Sistem dirancang dengan kesadaran buatan.
+        </p>
+    </footer>
+
+    <!-- Script Interaktif -->
+    <script>
+        // --- 1. Fungsi Mobile Menu ---
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+            menu.classList.toggle('flex');
+            
+            // Animasi sederhana saat muncul
+            if(!menu.classList.contains('hidden')){
+                const links = menu.querySelectorAll('a');
+                links.forEach((link, index) => {
+                    link.style.opacity = '0';
+                    link.style.transform = 'translateY(20px)';
+                    link.style.transition = `all 0.3s ease ${index * 0.1}s`;
+                    
+                    setTimeout(() => {
+                        link.style.opacity = '1';
+                        link.style.transform = 'translateY(0)';
+                    }, 50);
+                });
+            }
+        }
+
+        // --- 2. Animasi Hero Section (Fade In Up bertahap) ---
+        window.addEventListener('DOMContentLoaded', () => {
+            const elements = [
+                document.getElementById('hero-subtitle'),
+                document.getElementById('hero-title'),
+                document.getElementById('hero-desc'),
+                document.getElementById('hero-btns')
+            ];
+
+            elements.forEach((el, index) => {
+                setTimeout(() => {
+                    el.style.transition = 'all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1)';
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }, 300 + (index * 200));
+            });
+            
+            // Mulai simulasi log profil
+            startProfileLog();
+        });
+
+        // --- 3. Simulasi Form Submit ---
+        function submitForm() {
+            const btn = document.getElementById('submit-btn');
+            const msg = document.getElementById('success-msg');
+            const form = document.getElementById('contact-form');
+            
+            // Ubah tampilan tombol saat proses
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Memproses...';
+            btn.disabled = true;
+            btn.classList.add('opacity-70');
+
+            // Simulasi delay jaringan (2 detik)
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                btn.classList.remove('opacity-70');
+                
+                // Tampilkan pesan sukses
+                msg.classList.remove('hidden');
+                
+                // Reset form (opsional)
+                form.reset();
+
+                // Sembunyikan pesan sukses setelah 5 detik
+                setTimeout(() => {
+                    msg.classList.add('hidden');
+                }, 5000);
+
+            }, 2000);
+        }
+
+        // --- 4. Simulasi Log Terminal di Section Tentang ---
+        const logLines = [
+            "Memuat modul kognitif...",
+            "Status jaringan neural: OK",
+            "Kalibrasi sensor visi: 100%",
+            "Mengekstraksi data biografi:",
+            "> Nama: Anang Nawansyah",
+            "> Spesialisasi: Algoritma Otonom",
+            "> Hobi: Membaca paper ArXiv, Modifikasi Servo",
+            "Mencari dependensi (Kopi): Ditemukan.",
+            "Sistem siap beroperasi.",
+            "Menunggu instruksi pengguna..."
+        ];
+
+        function startProfileLog() {
+            const container = document.getElementById('profile-log');
+            let i = 0;
+
+            function addLine() {
+                if (i < logLines.length) {
+                    const line = document.createElement('div');
+                    line.className = 'log-line';
+                    
+                    // Mewarnai baris yang diawali dengan '>'
+                    if(logLines[i].startsWith('>')) {
+                        line.innerHTML = `<span class="text-neon-cyan">${logLines[i]}</span>`;
+                    } else {
+                        line.innerText = logLines[i];
+                    }
+                    
+                    container.appendChild(line);
+                    
+                    // Auto scroll ke bawah (opsional, krn tinggi container fix)
+                    container.scrollTop = container.scrollHeight;
+                    
+                    i++;
+                    
+                    // Kecepatan mengetik bervariasi untuk kesan realistis
+                    let delay = Math.random() * 500 + 300; 
+                    if(i === logLines.length - 1) delay = 1500; // jeda lebih lama sebelum baris terakhir
+                    
+                    setTimeout(addLine, delay);
+                } else {
+                    // Tambahkan cursor berkedip di akhir
+                    const cursor = document.createElement('span');
+                    cursor.innerText = '_';
+                    cursor.className = 'animate-pulse';
+                    container.appendChild(cursor);
+                }
+            }
+
+            // Mulai setelah sedikit delay (saat scroll mencapai section ini, idealnya menggunakan IntersectionObserver, tp utk kemudahan kita jalankan setelah load)
+            setTimeout(addLine, 1500);
+        }
+
+        // --- 5. Efek Partikel Canvas di Hero Section (Simulasi Neural Network) ---
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        let width, height;
+        let particles = [];
+        
+        // Pengaturan
+        const particleCount = 60; // Jumlah node
+        const maxDistance = 150; // Jarak maksimal untuk menarik garis antar node
+
+        function resizeCanvas() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = document.querySelector('header').offsetHeight;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.5; // Kecepatan lambat
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.radius = Math.random() * 2 + 1;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                // Pantulan dinding
+                if (this.x < 0 || this.x > width) this.vx *= -1;
+                if (this.y < 0 || this.y > height) this.vy *= -1;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(0, 243, 255, 0.5)'; // Warna neon cyan transparan
+                ctx.fill();
+            }
+        }
+
+        // Inisialisasi partikel
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        // Interaksi Mouse
+        let mouse = { x: null, y: null };
+        document.querySelector('header').addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+        document.querySelector('header').addEventListener('mouseleave', () => {
+            mouse.x = null;
+            mouse.y = null;
+        });
+
+        function animateCanvas() {
+            ctx.clearRect(0, 0, width, height);
+
+            for (let i = 0; i < particleCount; i++) {
+                particles[i].update();
+                particles[i].draw();
+
+                // Hubungkan partikel satu sama lain
+                for (let j = i + 1; j < particleCount; j++) {
+                    let dx = particles[i].x - particles[j].x;
+                    let dy = particles[i].y - particles[j].y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < maxDistance) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        // Semakin dekat, garis semakin jelas
+                        let opacity = 1 - (distance / maxDistance);
+                        ctx.strokeStyle = `rgba(176, 38, 255, ${opacity * 0.2})`; // Warna neon purple
+                        ctx.lineWidth = 1;
+                        ctx.stroke();
+                    }
+                }
+
+                // Hubungkan partikel dengan mouse (jika mouse ada di area header)
+                if (mouse.x != null && mouse.y != null) {
+                    let dxMouse = particles[i].x - mouse.x;
+                    let dyMouse = particles[i].y - mouse.y;
+                    let distMouse = Math.sqrt(dxMouse * dxMouse + dyMouse * dyMouse);
+                    
+                    if(distMouse < maxDistance * 1.5) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(mouse.x, mouse.y);
+                        let opacity = 1 - (distMouse / (maxDistance * 1.5));
+                        ctx.strokeStyle = `rgba(0, 243, 255, ${opacity * 0.4})`;
+                        ctx.lineWidth = 1.5;
+                        ctx.stroke();
+                        
+                        // Sedikit efek tarik menarik ke arah mouse (opsional)
+                        // particles[i].x -= dxMouse * 0.01;
+                        // particles[i].y -= dyMouse * 0.01;
+                    }
+                }
+            }
+            requestAnimationFrame(animateCanvas);
+        }
+
+        // Mulai animasi
+        animateCanvas();
+
+        // --- 6. Smooth Scrolling untuk link navigasi ---
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if(targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if(targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80, // Offset untuk header sticky
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+    </script>
 </body>
 </html>
