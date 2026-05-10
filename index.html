@@ -493,7 +493,7 @@
                     <p class="text-gray-400">Punya ide proyek AI atau butuh solusi robotika? Mari berkolaborasi.</p>
                 </div>
 
-                <form id="contact-form" class="space-y-6 relative z-10" onsubmit="event.preventDefault(); submitFormToAppSheet();">
+                <form id="contact-form" class="space-y-6 relative z-10" onsubmit="event.preventDefault(); submitFormToGoogleSheets();">
                     <div class="grid md:grid-cols-2 gap-6">
                         <div class="space-y-2">
                             <label class="font-tech text-xs text-neon-cyan pl-1">Input ID Pengirim:</label>
@@ -586,8 +586,8 @@
             startProfileLog();
         });
 
-        // --- 3. Fungsi Kirim Form ke AppSheet API ---
-        async function submitFormToAppSheet() {
+        // --- 3. Fungsi Kirim Form ke Google Sheets (via Apps Script) ---
+        async function submitFormToGoogleSheets() {
             const btn = document.getElementById('submit-btn');
             const msg = document.getElementById('success-msg');
             const form = document.getElementById('contact-form');
@@ -598,47 +598,29 @@
             const message = document.getElementById('sender-message').value;
 
             /* ==========================================
-               ⚠️ KONFIGURASI APPSHEET API (WAJIB DIISI) ⚠️
+               ⚠️ KONFIGURASI GOOGLE APPS SCRIPT URL ⚠️
                ========================================== */
-            const APP_ID = "MASUKKAN_APP_ID_ANDA_DISINI"; 
-            const ACCESS_KEY = "MASUKKAN_APPLICATION_ACCESS_KEY_DISINI";
-            const TABLE_NAME = "NamaTabelDiAppSheet"; // Contoh: "KontakMasuk"
+            // Masukkan URL Web App dari Google Apps Script di bawah ini
+            const SCRIPT_URL = "MASUKKAN_URL_WEB_APP_APPS_SCRIPT_ANDA_DISINI"; 
             /* ========================================== */
-
-            const apiUrl = `https://api.appsheet.com/api/v2/apps/${APP_ID}/tables/${TABLE_NAME}/Action`;
 
             // Animasi tombol loading
             const originalText = btn.innerHTML;
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menghubungkan ke AppSheet...';
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Mentransmisikan Data...';
             btn.disabled = true;
             btn.classList.add('opacity-70');
 
-            // Struktur Payload JSON sesuai standar dokumentasi AppSheet API
-            const payload = {
-                "Action": "Add",
-                "Properties": {
-                    "Locale": "id-ID",
-                    "Timezone": "SE Asia Standard Time"
-                },
-                "Rows": [
-                    {
-                        // Sesuaikan bagian kiri ("Nama", "Email", dll) dengan nama kolom di database/Google Sheet Anda
-                        "Nama": name,
-                        "Email": email,
-                        "Pesan": message
-                    }
-                ]
-            };
+            // Menyiapkan data untuk dikirim menggunakan FormData (menghindari masalah CORS)
+            const formData = new FormData();
+            formData.append('nama', name);
+            formData.append('email', email);
+            formData.append('pesan', message);
 
             try {
-                // Mengirim request ke AppSheet
-                const response = await fetch(apiUrl, {
+                // Mengirim request POST ke Google Apps Script
+                const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'ApplicationAccessKey': ACCESS_KEY
-                    },
-                    body: JSON.stringify(payload)
+                    body: formData
                 });
 
                 if (response.ok) {
@@ -647,25 +629,24 @@
                     btn.disabled = false;
                     btn.classList.remove('opacity-70');
                     
-                    msg.innerHTML = "[SUCCESS] Data berhasil ditransmisikan ke server AppSheet.";
+                    msg.innerHTML = "[SUCCESS] Data berhasil ditransmisikan ke Google Sheets.";
                     msg.classList.remove('hidden');
                     msg.classList.remove('text-red-400', 'border-red-500/30', 'bg-red-500/10');
                     msg.classList.add('text-green-400', 'border-green-500/30', 'bg-green-500/10');
                     
                     form.reset(); // Kosongkan form
                 } else {
-                    const errData = await response.json();
-                    throw new Error(errData.Message || "Gagal menghubungi AppSheet.");
+                    throw new Error("Gagal menghubungi Google Sheets.");
                 }
             } catch (error) {
-                // Jika terjadi error (API key salah, koneksi gagal, dll)
-                console.error("Error Integrasi AppSheet:", error);
+                // Jika terjadi error
+                console.error("Error Integrasi Google Sheets:", error);
                 
                 btn.innerHTML = originalText;
                 btn.disabled = false;
                 btn.classList.remove('opacity-70');
                 
-                msg.innerHTML = `[ERROR] Gagal melakukan inisiasi koneksi. Pastikan Konfigurasi API valid.`;
+                msg.innerHTML = `[ERROR] Gagal melakukan transmisi. Pastikan SCRIPT_URL valid.`;
                 msg.classList.remove('hidden');
                 msg.classList.remove('text-green-400', 'border-green-500/30', 'bg-green-500/10');
                 msg.classList.add('text-red-400', 'border-red-500/30', 'bg-red-500/10');
